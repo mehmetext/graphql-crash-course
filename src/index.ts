@@ -1,47 +1,32 @@
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
-import { readFileSync } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { expressMiddleware } from "@as-integrations/express5";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
 
-const books = [
-  {
-    title: "The Awakening",
-    author: "Kate Chopin",
+dotenv.config({ path: ".env" });
+
+const app = express();
+const port = process.env.PORT || 4001;
+
+const apolloServer = new ApolloServer({
+  typeDefs: `
+    type Query {
+      "Hello World açıklaması"
+      hello: String
+    }
+  `,
+  resolvers: {
+    Query: {
+      hello: () => "Hello World",
+    },
   },
-  {
-    title: "City of Glass",
-    author: "Paul Auster",
-  },
-];
-
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
-};
-
-const typeDefs = readFileSync(
-  path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
-    "schemas/schema.graphql"
-  ),
-  "utf-8"
-);
-
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
 });
 
-// Passing an ApolloServer instance to the `startStandaloneServer` function:
-//  1. creates an Express app
-//  2. installs your ApolloServer instance as middleware
-//  3. prepares your app to handle incoming requests
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
+apolloServer.start().then(() => {
+  app.use("/graphql", cors(), express.json(), expressMiddleware(apolloServer));
 });
 
-console.log(`🚀  Server ready at: ${url}`);
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
