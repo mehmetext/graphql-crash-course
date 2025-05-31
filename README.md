@@ -16,6 +16,12 @@ This project is a GraphQL backend I developed to learn how to build a GraphQL se
 
 1. Clone the repository
 2. Run `pnpm install` to install the dependencies
-3. Run `pnpm run dev` to start the development server
-4. Open the browser and go to `http://localhost:4000/graphql` to see the GraphQL playground
-5. Run the queries and mutations in the GraphQL playground
+3. Create a `.env` file in the root of the project and add the following variables:
+
+```
+PORT=4000
+```
+
+4. Run `pnpm run dev` to start the development server
+5. Open the browser and go to `http://localhost:4000/graphql` to see the GraphQL playground
+6. Run the queries and mutations in the GraphQL playground
