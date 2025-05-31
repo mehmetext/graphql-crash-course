@@ -24,7 +24,7 @@ export default async function Home() {
   return (
     <div className="container mx-auto py-8">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex md:flex-row flex-col gap-4 justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Kitap Koleksiyonu</h1>
         <div className="flex gap-4">
           <Input placeholder="Kitap ara..." className="w-[300px]" />
