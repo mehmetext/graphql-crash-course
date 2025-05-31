@@ -4,7 +4,13 @@ import books from "../mock/books";
 
 const resolvers: Resolvers = {
   Query: {
-    books: () => books as Book[],
+    books: (_, { search, category }) => {
+      return books.filter((book) => {
+        if (search && !book.title.includes(search)) return false;
+        if (category && book.category !== category) return false;
+        return true;
+      }) as Book[];
+    },
     book: (_, { id }) => books.find((book) => book.id === id) as Book,
     authors: () => authors as Author[],
     author: (_, { id }) => authors.find((author) => author.id === id) as Author,

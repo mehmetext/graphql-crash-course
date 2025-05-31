@@ -1,4 +1,5 @@
 import { getHome } from "@/actions/get-home";
+import Filters from "@/components/filters";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,39 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Image from "next/image";
 
-export default async function Home() {
-  const home = await getHome();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ search: string; category: string }>;
+}) {
+  const home = await getHome(await searchParams);
 
   return (
     <div className="container mx-auto py-8">
       {/* Header Section */}
       <div className="flex md:flex-row flex-col gap-4 justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Kitap Koleksiyonu</h1>
-        <div className="flex gap-4">
-          <Input placeholder="Kitap ara..." className="w-[300px]" />
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Kategori seç" />
-            </SelectTrigger>
-            <SelectContent>
-              {home.categories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Filters categories={home.categories} />
       </div>
 
       {/* Books Grid */}

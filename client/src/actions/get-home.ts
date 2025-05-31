@@ -3,11 +3,16 @@
 import client from "@/lib/apollo-client";
 import { gql } from "@apollo/client";
 
-export const getHome = async () => {
+export const getHome = async (searchParams: {
+  search: string;
+  category: string;
+}) => {
+  const { search, category } = searchParams;
+
   const { data } = await client.query({
     query: gql`
-      query GetBooks {
-        books {
+      query GetBooks($search: String, $category: String) {
+        books(search: $search, category: $category) {
           id
           title
           price
@@ -21,6 +26,10 @@ export const getHome = async () => {
         categories
       }
     `,
+    variables: {
+      search,
+      category,
+    },
   });
 
   return data as {
