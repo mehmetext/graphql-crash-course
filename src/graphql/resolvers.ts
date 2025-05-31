@@ -6,7 +6,7 @@ const resolvers: Resolvers = {
   Query: {
     books: () => books as Book[],
     book: (_, { id }) => books.find((book) => book.id === id) as Book,
-    authors: (_, __, context) => authors as Author[],
+    authors: () => authors as Author[],
     author: (_, { id }) => authors.find((author) => author.id === id) as Author,
   },
   Book: {
