@@ -3,7 +3,7 @@
 import client from "@/lib/apollo-client";
 import { gql } from "@apollo/client";
 
-export const getBooks = async () => {
+export const getHome = async () => {
   const { data } = await client.query({
     query: gql`
       query GetBooks {
@@ -18,9 +18,13 @@ export const getBooks = async () => {
             name
           }
         }
+        categories
       }
     `,
   });
 
-  return data.books as Book[];
+  return data as {
+    books: Book[];
+    categories: string[];
+  };
 };

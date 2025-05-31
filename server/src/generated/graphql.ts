@@ -75,6 +75,7 @@ export type Query = {
   authors: Array<Author>;
   book?: Maybe<Book>;
   books: Array<Book>;
+  categories: Array<Scalars['String']['output']>;
 };
 
 
@@ -212,6 +213,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   authors?: Resolver<Array<ResolversTypes['Author']>, ParentType, ContextType>;
   book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookArgs, 'id'>>;
   books?: Resolver<Array<ResolversTypes['Book']>, ParentType, ContextType>;
+  categories?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = Context> = {

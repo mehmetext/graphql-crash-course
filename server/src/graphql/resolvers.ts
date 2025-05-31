@@ -8,6 +8,13 @@ const resolvers: Resolvers = {
     book: (_, { id }) => books.find((book) => book.id === id) as Book,
     authors: () => authors as Author[],
     author: (_, { id }) => authors.find((author) => author.id === id) as Author,
+    categories: () => {
+      const categories = new Set<string>();
+      books.forEach((book) => {
+        categories.add(book.category);
+      });
+      return Array.from(categories);
+    },
   },
   Book: {
     author: (book) =>

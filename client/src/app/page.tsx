@@ -1,4 +1,4 @@
-import { getBooks } from "@/actions/get-books";
+import { getHome } from "@/actions/get-home";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,7 +19,7 @@ import {
 import Image from "next/image";
 
 export default async function Home() {
-  const books = await getBooks();
+  const home = await getHome();
 
   return (
     <div className="container mx-auto py-8">
@@ -33,10 +33,11 @@ export default async function Home() {
               <SelectValue placeholder="Kategori seç" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Tümü</SelectItem>
-              <SelectItem value="fiction">Kurgu</SelectItem>
-              <SelectItem value="non-fiction">Kurgu Dışı</SelectItem>
-              <SelectItem value="biography">Biyografi</SelectItem>
+              {home.categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -45,7 +46,7 @@ export default async function Home() {
       {/* Books Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {/* Sample Book Card - This will be mapped over actual data */}
-        {books.map((book) => (
+        {home.books.map((book) => (
           <Card key={book.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle>{book.title}</CardTitle>
