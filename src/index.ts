@@ -1,33 +1,47 @@
-// Type tanımlamaları
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  age?: number; // Opsiyonel alan
-}
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { readFileSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// Örnek bir fonksiyon
-function createUser(name: string, email: string, age?: number): User {
-  return {
-    id: Math.floor(Math.random() * 1000),
-    name,
-    email,
-    age,
-  };
-}
+const books = [
+  {
+    title: "The Awakening",
+    author: "Kate Chopin",
+  },
+  {
+    title: "City of Glass",
+    author: "Paul Auster",
+  },
+];
 
-// Örnek kullanım
-const user: User = createUser("John Doe", "john@example.com", 30);
+const resolvers = {
+  Query: {
+    books: () => books,
+  },
+};
 
-// Tip güvenliği örneği
-function displayUserInfo(user: User): void {
-  console.log(`User ID: ${user.id}`);
-  console.log(`Name: ${user.name}`);
-  console.log(`Email: ${user.email}`);
-  if (user.age) {
-    console.log(`Age: ${user.age}`);
-  }
-}
+const typeDefs = readFileSync(
+  path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "schemas/schema.graphql"
+  ),
+  "utf-8"
+);
 
-// Fonksiyonu çağırma
-displayUserInfo(user);
+// The ApolloServer constructor requires two parameters: your schema
+// definition and your set of resolvers.
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+// Passing an ApolloServer instance to the `startStandaloneServer` function:
+//  1. creates an Express app
+//  2. installs your ApolloServer instance as middleware
+//  3. prepares your app to handle incoming requests
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
+});
+
+console.log(`🚀  Server ready at: ${url}`);
