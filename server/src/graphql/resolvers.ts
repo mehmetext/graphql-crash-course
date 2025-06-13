@@ -6,7 +6,11 @@ const resolvers: Resolvers = {
   Query: {
     books: (_, { search, category }) => {
       return books.filter((book) => {
-        if (search && !book.title.includes(search)) return false;
+        if (
+          search &&
+          !book.title.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+        )
+          return false;
         if (category && book.category !== category) return false;
         return true;
       }) as Book[];
